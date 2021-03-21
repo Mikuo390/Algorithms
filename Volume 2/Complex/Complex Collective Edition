@@ -1,0 +1,189 @@
+#define _CRT_SECURE_NO_WARNINGS
+
+#include<math.h>
+#include<stdio.h>
+#include <iostream>
+using namespace std;
+
+typedef struct {
+	float realpart;//实部
+	float imagpart;//虚部
+}Complex;//定义复数抽象类型
+
+//————————————————函数声明————————————————
+void assign(Complex* Com, float real, float imag);//赋值
+void add(Complex* Com, float real, float imag);//A+B
+void minus(Complex* Com, float real, float imag);//A-B
+void munltiply(Complex* Com, float real, float imag);//A*B
+void divide(Complex* Com, float real, float imag);//A/B
+float GetReal(Complex* Com);//取复数实部
+float GetImag(Complex* Com);//去复数虚部
+void Print_C(Complex* Com);//复数输出
+
+//————————————————基本函数————————————————
+//赋值
+void assign(Complex* Com, float real, float imag) {
+	Com->realpart = real;//实部赋值
+	Com->imagpart = imag;//虚部赋值
+}//End of assign()
+
+void add(Complex* Com, Complex A, Complex B) {
+	Com->realpart = A.realpart + B.realpart;//实部相加
+	Com->imagpart = A.imagpart + B.imagpart;//虚部相加
+}//End of add()
+
+void min(Complex* Com, Complex A, Complex B) {
+	Com->realpart = A.realpart - B.realpart;//实部相减
+	Com->imagpart = A.imagpart - B.imagpart;//虚部相减
+}//End of minus()
+
+void munltiply(Complex* Com, Complex A, Complex B) {
+	Com->realpart = A.realpart * B.realpart - A.imagpart * B.imagpart;
+	Com->imagpart = A.imagpart * B.realpart + A.realpart * B.imagpart;
+}//End of munlt()
+
+void divide(Complex* Com, Complex A, Complex B) {
+	Com->realpart = (A.realpart * B.realpart + A.imagpart * B.imagpart)
+		/ (pow(B.realpart, 2) + pow(B.imagpart, 2));
+	Com->imagpart = (A.imagpart * B.realpart - A.realpart * B.imagpart)
+		/ (pow(B.realpart, 2) + pow(B.imagpart, 2));
+}//End of divide()
+
+float GetReal(Complex* Com) {
+	cout << Com->realpart << endl;
+	return Com->realpart;
+}//End of GetReal()
+
+float GetImag(Complex* Com) {
+	cout << Com->imagpart << endl;
+	return Com->imagpart;
+}//End of GetImag()
+
+void Print_C(Complex* Com) {
+	printf("%.2f + %.2f *i\n", Com->realpart, Com->imagpart);
+}//End of Print_C()
+
+
+//————————————————功能函数————————————————
+//全局变量部分
+Complex z1, z2, z3, z4, z;
+float RealPart = 0, ImagPart = 0;
+
+//菜单
+void menu() {
+	cout << "***********************************" << endl;
+	cout << "**********1.加法   2.减法**********" << endl;
+	cout << "**********3.乘法   4.除法**********" << endl;
+	cout << "**********5.实部   6.虚部**********" << endl;
+	cout << "**********     0.退出    **********" << endl;
+	cout << "***********************************" << endl;
+}//End of menu()
+
+//赋值函数
+void assignValue(Complex* Com) {
+	float a1, a2, b1, b2;
+
+	cout << "————————————————" << endl;
+	cout << "请输入复数z1的实部：";
+	cin >> a1;
+	cout << "请输入复数z1的虚部：";
+	cin >> b1;
+	assign(&z1, a1, b1);
+	cout << "复数z1的表达式：";
+	Print_C(&z1);
+
+	cout << endl;
+
+	cout << "请输入复数z2的实部：";
+	cin >> a2;
+	cout << "请输入复数z2的虚部：";
+	cin >> b2;
+	assign(&z2, a2, b2);
+	cout << "复数z2的表达式：";
+	Print_C(&z2);
+	cout << "————————————————" << endl;
+}//End of assignValue()
+
+//加法函数
+void addCalc(Complex* Com) {
+	assignValue(Com);
+
+	add(&z3, z1, z2);
+	cout << "复数加法计算结果为：";
+	Print_C(&z3);
+	cout << "————————————————" << endl;
+	cout << endl;
+}//End of addCalc()
+
+//减法函数
+void minCalc(Complex* Com) {
+	assignValue(Com);
+
+	min(&z3, z1, z2);
+	cout << "复数减法计算结果为：";
+	Print_C(&z3);
+	cout << "————————————————" << endl;
+	cout << endl;
+}//End of minCalc()
+
+//乘法函数
+void multCalc(Complex* Com) {
+	assignValue(Com);
+
+	munltiply(&z3, z1, z2);
+	cout << "复数乘法计算结果为：";
+	Print_C(&z3);
+	cout << "————————————————" << endl;
+	cout << endl;
+}//End of multCalc()
+
+//除法
+void divCalc(Complex* Com) {
+	assignValue(Com);
+
+	divide(&z3, z1, z2);
+	cout << "复数乘法计算结果为：";
+	Print_C(&z3);
+	cout << "————————————————" << endl;
+	cout << endl;
+}//End of divCalc()
+
+//主函数
+int main() {
+	Complex* Com = NULL;
+	int choice = 0;
+	while(1) {
+		menu();
+		cout << "请输入菜单序号:";
+		cin >> choice;
+		if (choice == 0)
+			break;
+
+		switch (choice){
+		case 1:addCalc(Com);
+			break;
+		case 2:minCalc(Com);
+			break;
+		case 3:multCalc(Com);
+			break;
+		case 4:divCalc(Com);
+			break;
+		default:
+			cout << "输入错误！！！请重新输入" << endl;
+			break;
+		}//Switch()
+	}//while()
+
+	//功能测试
+	//Complex z1, z2, z3, z4, z;
+	//float RealPart = 0, ImagPart = 0;
+	//assign(&z1, 8.0, 6.0);//z1 = 8+6i 
+	//assign(&z2, 4.0, 3.0);//z2 = 4+3i
+	//add(&z3, z1, z2);//z3 = (8 + 6i) + (4 + 3i)
+	//munltiply(&z4, z1, z2);//z4 = (8 + 6i) * (4 + 3i)
+	//divide(&z, z4, z3);//z = z4/z3 = (8 + 6i) * (4 + 3i) / ((8 + 6i) + (4 + 3i))
+	//GetReal(&z);
+	//GetImag(&z);
+	//Print_C(&z);
+
+}//End of main()
